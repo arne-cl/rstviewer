@@ -35,7 +35,8 @@ def rstview(rs3_filepath, user='temp_user', project='rstviewer_temp'):
     top_spacing = 0
     layer_spacing = 60
 
-    templatedir = os.path.join(rstviewer.PACKAGE_ROOT_DIR, 'templates/')
+    templatedir = os.path.join(rstviewer.PACKAGE_ROOT_DIR, 'templates')
+    script_dir = os.path.join(rstviewer.PACKAGE_ROOT_DIR, 'script')
 
     current_doc = os.path.basename(rs3_filepath)
     current_project = project
@@ -45,9 +46,9 @@ def rstview(rs3_filepath, user='temp_user', project='rstviewer_temp'):
 
     header = header.replace("**page_title**","RST Viewer")
     header = header.replace("**doc**",current_doc)
-    #~ import pudb; pudb.set_trace()
     header = header.replace(
         "**css_dir**", os.path.join(rstviewer.PACKAGE_ROOT_DIR, 'css'))
+    header = header.replace('**script_dir**', script_dir)
 
     cpout = ""
     cpout += header
@@ -158,7 +159,8 @@ def rstview(rs3_filepath, user='temp_user', project='rstviewer_temp'):
 
     max_right = get_max_right(current_doc,current_project,user)
 
-    cpout += '''<script src="./script/jquery.jsPlumb-1.7.5-min.js"></script>\n<script>\n'''
+    cpout += '''<script src="{script_dir}/jquery.jsPlumb-1.7.5-min.js"></script>\n<script>\n'''.format(
+        script_dir=script_dir)
 
     cpout += 'function select_my_rel(options,my_rel){'
     cpout += 'var multi_options = "' + multi_options +'";'
