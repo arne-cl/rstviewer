@@ -295,7 +295,7 @@ def cli():
         with codecs.open(args.output_file, 'w', 'utf8') as outfile:
             outfile.write(rstview(args.rs3_file))
     else:
-        sys.stdout.write(rstview(args.rs3_file))
+        sys.stdout.write(rstview(args.rs3_file).encode('utf8'))
 
 
 if __name__ == '__main__':
