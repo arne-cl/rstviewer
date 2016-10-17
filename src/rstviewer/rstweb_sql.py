@@ -3,15 +3,18 @@
 
 """
 Data access functions to read from and write to the SQLite backend.
-Author: Amir Zeldes
+
+Original Author: Amir Zeldes
+Modifications: Arne Neumann
 """
 
-
-import sqlite3
-from rstviewer.rstweb_reader import *
 import codecs
 import os
 import re
+
+import sqlite3
+
+from rstviewer.rstweb_reader import *
 
 
 DBPATH = os.path.dirname(os.path.realpath(__file__)) + os.sep +".."+os.sep+"rstweb.db"
@@ -51,8 +54,6 @@ def setup_db(dbpath=DBPATH):
 
     conn.commit()
     conn.close()
-
-    initialize_settings()
 
 
 def import_document(filename, project, user, dbpath=DBPATH):

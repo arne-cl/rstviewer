@@ -1,30 +1,32 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+"""
+A converter for RST structures which reads RS3 files and writes HTML/Javascript.
+
+This is merely a fork of Amir Zeldes' rstWeb package, a web-based annotation
+tool for Rhetorical Structure Theory available here:
+https://github.com/amir-zeldes/rstWeb .
+"""
+
 import argparse
 import codecs
 import os
 import re
 import sys
 
+import rstviewer
 from rstviewer.rstweb_sql import (
     import_document, get_def_rel, get_max_right, get_multinuc_children_lr,
     get_multinuc_children_lr_ids, get_rel_type,
-    get_rst_doc, get_rst_rels)
+    get_rst_doc, get_rst_rels, setup_db)
 from rstviewer.rstweb_classes import NODE, get_depth, get_left_right
 
-from rstviewer.configobj import ConfigObj
-from rstviewer.pathutils import readfile
 
-
-def rstview(rs3_filepath):
-    user = 'temp_user'
-    project = 'rstviewer_temp'
+def rstview(rs3_filepath, user='temp_user', project='rstviewer_temp'):
+    setup_db()
     import_document(filename=rs3_filepath, project=project,
                     user=user)
-
-    scriptpath = os.path.dirname(os.path.realpath(__file__)) + os.sep
-    userdir = scriptpath + "users" + os.sep
 
     UTF8Writer = codecs.getwriter('utf8')
     sys.stdout = UTF8Writer(sys.stdout)
@@ -33,24 +35,22 @@ def rstview(rs3_filepath):
     top_spacing = 0
     layer_spacing = 60
 
-    config = ConfigObj(userdir + 'config.ini')
-    templatedir = scriptpath + config['controltemplates'].replace("/",os.sep)
+    templatedir = os.path.join(rstviewer.PACKAGE_ROOT_DIR, 'templates/')
 
     current_doc = os.path.basename(rs3_filepath)
     current_project = project
 
-    template = "main_header.html"
-    header = readfile(templatedir+template)
+    with open(os.path.join(templatedir, 'main.html'), 'r') as template:
+        header = template.read()
+
     header = header.replace("**page_title**","RST Viewer")
     header = header.replace("**doc**",current_doc)
+    #~ import pudb; pudb.set_trace()
+    header = header.replace(
+        "**css_dir**", os.path.join(rstviewer.PACKAGE_ROOT_DIR, 'css'))
 
     cpout = ""
     cpout += header
-
-    edit_bar = "edit_bar.html"
-    edit_bar = readfile(templatedir+edit_bar)
-
-    cpout += edit_bar
 
     cpout += '''<div>\n'''
 

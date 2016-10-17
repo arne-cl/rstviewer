@@ -43,26 +43,15 @@ def gen_data_files(src_dir):
     return fpaths
 
 
-# distribution_files = [('.', ['./NEWS.rst', './Makefile', './LICENSE', './README.rst', './Dockerfile'])]
+distribution_files = [('css', gen_data_files('css')), ('script', gen_data_files('script')), ('templates', gen_data_files('templates'))]
 
 
 setup(name='rstviewer',
-  #  version=version,
-  #  description="graph-based processing of multi-level annotated corpora",
-  #  long_description=README + '\n\n' + NEWS,
-    #author='Arne Neumann',
-    #author_email='discoursegraphs.programming@arne.cl',
-    #url='https://github.com/arne-cl/discoursegraphs',
-    #license='3-Clause BSD License',
     packages=find_packages("src"),
     package_dir = {'': "src"},
-    #package_data = {'discoursegraphs': gen_data_files('src/discoursegraphs/data')},
-    #include_package_data=True,
-    #data_files = distribution_files,
+    data_files = distribution_files,
     zip_safe=False,
     install_requires=install_requires,
-    #setup_requires=['pytest-runner'],
-    #tests_require=['pytest', 'pytest-ordering'],
     entry_points={
         'console_scripts':
             ['rstviewer=rstviewer.main:cli']
