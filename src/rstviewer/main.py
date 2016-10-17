@@ -14,6 +14,7 @@ import codecs
 import os
 import re
 import sys
+import tempfile
 
 import rstviewer
 from rstviewer.rstweb_sql import (
@@ -23,7 +24,7 @@ from rstviewer.rstweb_sql import (
 from rstviewer.rstweb_classes import NODE, get_depth, get_left_right
 
 
-def rstview(rs3_filepath, user='temp_user', project='rstviewer_temp'):
+def rs3tohtml(rs3_filepath, user='temp_user', project='rstviewer_temp'):
     setup_db()
     import_document(filename=rs3_filepath, project=project,
                     user=user)
@@ -284,18 +285,61 @@ def rstview(rs3_filepath, user='temp_user', project='rstviewer_temp'):
     return cpout
 
 
+def rs3topng(rs3_filepath, png_filepath=None):
+    """Convert a RS3 file into a PNG image of the RST tree.
+
+    If no output filename is given, the PNG image is returned
+    as a string (which is useful for embedding).
+    """
+    from selenium import webdriver
+
+    html_str = rs3tohtml(rs3_filepath)
+
+    temp = tempfile.NamedTemporaryFile(suffix='.html', delete=False)
+    temp.write(html_str.encode('utf8'))
+    temp.close()
+
+    driver = webdriver.PhantomJS()
+    driver.get(temp.name)
+    os.unlink(temp.name)
+
+    png_str = driver.get_screenshot_as_png()
+    if png_filepath:
+        with open(png_filepath, 'w') as png_file:
+            png_file.write(png_str)
+    else:
+        return png_str
+
+
+def embed_rs3_image(rs3_filepath, shrink_to_fit=True):
+    display(Image(rs3topng(rs3_filepath), unconfined=not(shrink_to_fit)))
+
+
 def cli():
     parser = argparse.ArgumentParser(
     description="Convert an RS3 file into an HTML file containing the RST tree.")
     parser.add_argument('rs3_file')
     parser.add_argument('output_file', nargs='?')
+    parser.add_argument(
+        '-f', '--output-format', nargs='?', default='html',
+        help="output format: html (default), png")
+
     args = parser.parse_args(sys.argv[1:])
+
+    #~ import pudb; pudb.set_trace()
+    if args.output_format == 'png':
+        if args.output_file:
+            rs3topng(args.rs3_file, args.output_file)
+            sys.exit(0)
+        else:
+            sys.stderr.write("No PNG output file given.\n")
+            sys.exit(1)
 
     if args.output_file:
         with codecs.open(args.output_file, 'w', 'utf8') as outfile:
-            outfile.write(rstview(args.rs3_file))
+            outfile.write(rs3tohtml(args.rs3_file))
     else:
-        sys.stdout.write(rstview(args.rs3_file).encode('utf8'))
+        sys.stdout.write(rs3tohtml(args.rs3_file).encode('utf8'))
 
 
 if __name__ == '__main__':
