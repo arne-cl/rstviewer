@@ -16,8 +16,6 @@ import re
 import sys
 import tempfile
 
-from IPython.display import display, Image
-
 import rstviewer
 from rstviewer.rstweb_sql import (
     import_document, get_def_rel, get_max_right, get_multinuc_children_lr,
@@ -314,6 +312,7 @@ def rs3topng(rs3_filepath, png_filepath=None):
 
 
 def embed_rs3_image(rs3_filepath, shrink_to_fit=True):
+    from IPython.display import display, Image
     display(Image(rs3topng(rs3_filepath), unconfined=not(shrink_to_fit)))
 
 
