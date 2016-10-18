@@ -9,6 +9,7 @@ annotation tool for rhetorical structures.
 
 .. _`rstWeb`: https://github.com/amir-zeldes/rstWeb
 
+
 Usage
 -----
 
@@ -50,11 +51,29 @@ into a Jupyter notebook:
    :align: center
 
 
+Installation
+------------
+
+To use `rstviewer` to convert rs3 files into HTML pages, clone the repo
+and install it with python.
+
+::
+
+    git clone https://github.com/arne-cl/rstviewer.git
+    cd rstviewer
+    sudo python setup install.py
+
+To generate PNG images, you will additionally need to install selenium
+and PhantomJS::
+
+    sudo apt install phantomjs
+    sudo pip install selenium
+
+
 Citing
 ------
 
 If you're using rstviewer for a project or article, please cite Amir's original work:
 
-| Zeldes, Amir (2016). `rstWeb - A Browser-based Annotation Interface for Rhetorical Structure Theory and Discourse Relations. <http://aclweb.org/anthology/N/N16/N16-3001.pdf>`_   
+| Zeldes, Amir (2016). `rstWeb - A Browser-based Annotation Interface for Rhetorical Structure Theory and Discourse Relations. <http://aclweb.org/anthology/N/N16/N16-3001.pdf>`_
 | In: Proceedings of NAACL-HLT 2016 System Demonstrations. San Diego, CA, 1-5.
-
