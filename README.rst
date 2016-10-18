@@ -43,7 +43,7 @@ type::
    :align: center
 
 You can also use `rstviewer` as a library, e.g. to embed an RST tree
-into a Jupyter notebook::
+into a Jupyter notebook:
 
 .. image:: rst_embed.png
    :alt: an rs3 file embedded into an IPython/Jupyter notebook
