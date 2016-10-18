@@ -10,11 +10,7 @@ import sys
 here = os.path.abspath(os.path.dirname(__file__))
 
 
-install_requires = [
-    # List your project dependencies here.
-    # For more details, see:
-    # http://packages.python.org/distribute/setuptools.html#declaring-dependencies
-]
+install_requires = []
 
 
 def gen_data_files(src_dir):
