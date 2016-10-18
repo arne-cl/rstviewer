@@ -325,10 +325,15 @@ def cli():
     parser.add_argument(
         '-f', '--output-format', nargs='?', default='html',
         help="output format: html (default), png")
+    parser.add_argument(
+        '-d', '--debug', action='store_true',
+        help="output format: html (default), png")
 
     args = parser.parse_args(sys.argv[1:])
 
-    #~ import pudb; pudb.set_trace()
+    if args.debug:
+        import pudb; pudb.set_trace()
+
     if args.output_format == 'png':
         if args.output_file:
             rs3topng(args.rs3_file, args.output_file)
