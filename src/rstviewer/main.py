@@ -16,6 +16,8 @@ import re
 import sys
 import tempfile
 
+from IPython.display import display, Image
+
 import rstviewer
 from rstviewer.rstweb_sql import (
     import_document, get_def_rel, get_max_right, get_multinuc_children_lr,
