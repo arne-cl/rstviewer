@@ -326,7 +326,7 @@ def embed_rs3_image(rs3_filepath, shrink_to_fit=True):
     display(Image(rs3topng(rs3_filepath), unconfined=not(shrink_to_fit)))
 
 
-def cli():
+def cli(argv=sys.argv[1:]):
     parser = argparse.ArgumentParser(
     description="Convert an RS3 file into an HTML file containing the RST tree.")
     parser.add_argument('rs3_file')
@@ -338,7 +338,7 @@ def cli():
         '-d', '--debug', action='store_true',
         help="output format: html (default), png")
 
-    args = parser.parse_args(sys.argv[1:])
+    args = parser.parse_args(argv)
 
     if args.debug:
         import pudb; pudb.set_trace()
@@ -359,4 +359,4 @@ def cli():
 
 
 if __name__ == '__main__':
-    cli()
+    cli(sys.argv[1:])
