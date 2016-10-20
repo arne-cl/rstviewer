@@ -291,7 +291,12 @@ def rs3topng(rs3_filepath, png_filepath=None):
     If no output filename is given, the PNG image is returned
     as a string (which is useful for embedding).
     """
-    from selenium import webdriver
+    try:
+        from selenium import webdriver
+        from selenium.common.exceptions import WebDriverException
+    except ImportError:
+        raise ImportError(
+            'Please install selenium: pip install selenium')
 
     html_str = rs3tohtml(rs3_filepath)
 
@@ -299,7 +304,12 @@ def rs3topng(rs3_filepath, png_filepath=None):
     temp.write(html_str.encode('utf8'))
     temp.close()
 
-    driver = webdriver.PhantomJS()
+    try:
+        driver = webdriver.PhantomJS()
+    except WebDriverException as err:
+        raise WebDriverException(
+           'Please install phantomjs: http://phantomjs.org/\n' + err.msg)
+
     driver.get(temp.name)
     os.unlink(temp.name)
 
