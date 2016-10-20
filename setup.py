@@ -43,6 +43,7 @@ distribution_files = [('css', gen_data_files('css')), ('script', gen_data_files(
 
 
 setup(name='rstviewer',
+    version='0.1.0',
     packages=find_packages("src"),
     package_dir = {'': "src"},
     data_files = distribution_files,
