@@ -11,13 +11,15 @@ Modifications: Arne Neumann
 import codecs
 import os
 import re
+import tempfile
 
 import sqlite3
 
 from rstviewer.rstweb_reader import *
 
 
-DBPATH = os.path.dirname(os.path.realpath(__file__)) + os.sep +".."+os.sep+"rstweb.db"
+with tempfile.NamedTemporaryFile(dir='/tmp', delete=False) as tmpfile:
+    DBPATH = tmpfile.name
 
 
 def setup_db(dbpath=DBPATH):
