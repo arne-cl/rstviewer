@@ -61,7 +61,7 @@ and install it with python.
 
     git clone https://github.com/arne-cl/rstviewer.git
     cd rstviewer
-    sudo python setup install.py
+    sudo python setup.py install
 
 To generate PNG images, you will additionally need to install selenium
 and PhantomJS::
