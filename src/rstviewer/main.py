@@ -322,8 +322,17 @@ def rs3topng(rs3_filepath, png_filepath=None):
 
 
 def embed_rs3_image(rs3_filepath, shrink_to_fit=True):
+    """Render an RST tree given the path to an .rs3 file."""
     from IPython.display import display, Image
     display(Image(rs3topng(rs3_filepath), unconfined=not(shrink_to_fit)))
+
+
+def embed_rs3str_image(rs3_string, shrink_to_fit=True):
+    """Render an RST tree given the string content of a .rs3 file."""
+    temp = tempfile.NamedTemporaryFile(suffix='.rs3', delete=False)
+    temp.write(rs3_string.encode('utf8'))
+    temp.close()
+    embed_rs3_image(temp.name, shrink_to_fit=shrink_to_fit)
 
 
 def cli(argv=sys.argv[1:]):
