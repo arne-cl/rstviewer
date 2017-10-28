@@ -36,8 +36,8 @@ def rs3tohtml(rs3_filepath, user='temp_user', project='rstviewer_temp'):
     top_spacing = 0
     layer_spacing = 60
 
-    templatedir = os.path.join(rstviewer.PACKAGE_ROOT_DIR, 'templates')
-    script_dir = os.path.join(rstviewer.PACKAGE_ROOT_DIR, 'script')
+    templatedir = os.path.join(rstviewer.DATA_ROOT_DIR, 'templates')
+    script_dir = os.path.join(rstviewer.DATA_ROOT_DIR, 'script')
 
     current_doc = os.path.basename(rs3_filepath)
     current_project = project
@@ -48,7 +48,7 @@ def rs3tohtml(rs3_filepath, user='temp_user', project='rstviewer_temp'):
     header = header.replace("**page_title**","RST Viewer")
     header = header.replace("**doc**",current_doc)
     header = header.replace(
-        "**css_dir**", os.path.join(rstviewer.PACKAGE_ROOT_DIR, 'css'))
+        "**css_dir**", os.path.join(rstviewer.DATA_ROOT_DIR, 'css'))
     header = header.replace('**script_dir**', script_dir)
 
     cpout = ""

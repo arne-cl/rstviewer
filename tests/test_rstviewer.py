@@ -15,7 +15,9 @@ from rstviewer.main import cli
 
 TESTDIR = os.path.dirname(__file__)
 RS3_FILEPATH = os.path.join(TESTDIR, 'test.rs3')
-EXPECTED_PNG = os.path.join(TESTDIR, 'result.png')
+EXPECTED_PNG1 = os.path.join(TESTDIR, 'result1.png')
+EXPECTED_PNG2 = os.path.join(TESTDIR, 'result2.png')
+
 EXPECTED_HTML = """<div>
 <div id="edu1" class="edu" title="1" style="left:0; top:120; width: 96px">
 	<div id="wsk1" class="whisker" style="width:96px;"></div>
@@ -55,8 +57,15 @@ def test_rs3topng():
         assert png_str == png_file.read()
         os.unlink(temp.name)
 
-    with open(EXPECTED_PNG, 'r') as expected_png_file:
-        assert png_str == expected_png_file.read()
+    # generated images might not be 100% identical, probably
+    # because of the font used
+    with open(EXPECTED_PNG1, 'r') as expected_png_file:
+        ident1 = png_str == expected_png_file.read()
+
+    with open(EXPECTED_PNG2, 'r') as expected_png_file:
+        ident2 = png_str == expected_png_file.read()
+
+    assert ident1 or ident2
 
 
 def test_cli_rs3tohtml():
@@ -82,6 +91,17 @@ def test_cli_rs3topng():
         out, err = pytest.capsys.readouterr()
         assert err == 0
 
-    with open(temp_png.name, 'r') as png_file, \
-        open(EXPECTED_PNG, 'r') as expected_png_file:
-            assert png_file.read() == expected_png_file.read()
+    with open(temp_png.name, 'r') as png_file:
+        png_str = png_file.read()
+        os.unlink(temp_png.name)
+
+    # generated images might not be 100% identical, probably
+    # because of the font used
+    with open(EXPECTED_PNG1, 'r') as expected_png_file:
+        ident1 = png_str == expected_png_file.read()
+
+    with open(EXPECTED_PNG2, 'r') as expected_png_file:
+        ident2 = png_str == expected_png_file.read()
+
+    assert ident1 or ident2
+

@@ -39,13 +39,15 @@ def gen_data_files(src_dir):
     return fpaths
 
 
-distribution_files = [('css', gen_data_files('css')), ('script', gen_data_files('script')), ('templates', gen_data_files('templates'))]
+distribution_files = [('.', ['./Makefile', './LICENSE', './README.rst', ])]
 
 
 setup(name='rstviewer',
     version='0.1.0',
     packages=find_packages("src"),
     package_dir = {'': "src"},
+    package_data = {'rstviewer': gen_data_files('src/rstviewer/data')},
+    include_package_data=True,
     data_files = distribution_files,
     zip_safe=False,
     install_requires=install_requires,
