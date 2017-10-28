@@ -10,7 +10,7 @@ import sys
 here = os.path.abspath(os.path.dirname(__file__))
 
 
-install_requires = []
+install_requires = ['selenium']
 
 
 def gen_data_files(src_dir):
