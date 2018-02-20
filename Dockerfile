@@ -12,4 +12,7 @@ RUN git clone https://github.com/arne-cl/rstviewer.git
 WORKDIR /opt/rstviewer
 RUN python2 setup.py install
 
+# workaround for PhantomJS error "QXcbConnection: Could not connect to display "
+ENV QT_QPA_PLATFORM offscreen
+
 ENTRYPOINT ["rstviewer"]
