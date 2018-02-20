@@ -10,7 +10,7 @@ import sys
 here = os.path.abspath(os.path.dirname(__file__))
 
 
-install_requires = ['selenium']
+install_requires = ['selenium', 'pudb']
 
 
 def gen_data_files(src_dir):

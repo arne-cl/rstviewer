@@ -2,7 +2,9 @@ FROM nlpbox/nlpbox-base:16.04
 
 RUN apt-get update -y && apt-get upgrade -y && \
     apt-get install -y python-pip phantomjs && \
-    pip2 install selenium
+    pip2 install selenium pudb
+
+ADD pudb.cfg /root/
 
 WORKDIR /opt
 RUN git clone https://github.com/arne-cl/rstviewer.git
