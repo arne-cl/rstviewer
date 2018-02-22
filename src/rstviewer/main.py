@@ -305,12 +305,14 @@ def rs3topng(rs3_filepath, png_filepath=None):
     temp.close()
 
     try:
-        driver = webdriver.PhantomJS()
+        opts = webdriver.firefox.options.Options()
+        opts.add_argument('--headless')
+        driver = webdriver.Firefox(options=opts)
     except WebDriverException as err:
         raise WebDriverException(
-           'Please install phantomjs: http://phantomjs.org/\n' + err.msg)
+           'Please install Firefox and geckodriver: https://github.com/mozilla/geckodriver/releases\n' + err.msg)
 
-    driver.get(temp.name)
+    driver.get("file://{}".format(temp.name))
     os.unlink(temp.name)
 
     png_str = driver.get_screenshot_as_png()
