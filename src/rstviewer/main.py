@@ -24,6 +24,29 @@ from rstviewer.rstweb_sql import (
 from rstviewer.rstweb_classes import NODE, get_depth, get_left_right
 
 
+JS_GET_DOCUMENT_HEIGHT = """
+let docHeight = Math.max(
+  document.body.scrollHeight, document.documentElement.scrollHeight,
+  document.body.offsetHeight, document.documentElement.offsetHeight,
+  document.body.clientHeight, document.documentElement.clientHeight
+);
+
+// we increase the height by 20% because the calculated value is still too small
+return Math.round(docHeight * 1.2);
+"""
+
+JS_GET_DOCUMENT_WIDTH = """
+let docWidth = Math.max(
+  document.body.scrollWidth, document.documentElement.scrollWidth,
+  document.body.offsetWidth, document.documentElement.offsetWidth,
+  document.body.clientWidth, document.documentElement.clientWidth
+);
+
+// we increase the width by 3% because the calculated value is still too small
+return Math.round(docWidth * 1.03);
+"""
+
+
 def rs3tohtml(rs3_filepath, user='temp_user', project='rstviewer_temp'):
     setup_db()
     import_document(filename=rs3_filepath, project=project,
@@ -314,6 +337,10 @@ def rs3topng(rs3_filepath, png_filepath=None):
 
     driver.get("file://{}".format(temp.name))
     os.unlink(temp.name)
+
+    doc_height = driver.execute_script(JS_GET_DOCUMENT_HEIGHT)
+    doc_width = driver.execute_script(JS_GET_DOCUMENT_WIDTH)
+    driver.set_window_size(height=doc_height, width=doc_width)
 
     png_str = driver.get_screenshot_as_png()
     if png_filepath:
