@@ -9,6 +9,10 @@ its commandline interface.
 import os
 import tempfile
 import pytest
+
+from PIL import Image
+import imagehash
+
 import rstviewer
 from rstviewer.main import cli
 
@@ -38,6 +42,15 @@ EXPECTED_HTML = """<div>
 </div>
 <br/>"""
 
+def image_matches(produced_file, expected_files=[EXPECTED_PNG1, EXPECTED_PNG2]):
+    """Return True, iff the average hash of the produced image matches any of the
+    expected images.
+    """
+    produced_hash = imagehash.average_hash(Image.open(produced_file))
+
+    expected_hashes = [imagehash.average_hash(Image.open(ef)) for ef in expected_files]
+    return any([produced_hash == expected_hash for expected_hash in expected_hashes])
+
 
 def test_rs3tohtml():
     """rs3 file is converted to HTML"""
@@ -47,25 +60,13 @@ def test_rs3tohtml():
 
 def test_rs3topng():
     """rs3 file is converted to PNG"""
-    png_str = rstviewer.rs3topng(RS3_FILEPATH)
-
     temp = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
     temp.close()
 
     rstviewer.rs3topng(RS3_FILEPATH, temp.name)
-    with open(temp.name, 'r') as png_file:
-        assert png_str == png_file.read()
-        os.unlink(temp.name)
-
-    # generated images might not be 100% identical, probably
-    # because of the font used
-    with open(EXPECTED_PNG1, 'r') as expected_png_file:
-        ident1 = png_str == expected_png_file.read()
-
-    with open(EXPECTED_PNG2, 'r') as expected_png_file:
-        ident2 = png_str == expected_png_file.read()
-
-    assert ident1 or ident2
+    match = image_matches(temp.name)
+    os.unlink(temp.name)
+    assert match is True
 
 
 def test_cli_rs3tohtml():
@@ -91,17 +92,6 @@ def test_cli_rs3topng():
         out, err = pytest.capsys.readouterr()
         assert err == 0
 
-    with open(temp_png.name, 'r') as png_file:
-        png_str = png_file.read()
-        os.unlink(temp_png.name)
-
-    # generated images might not be 100% identical, probably
-    # because of the font used
-    with open(EXPECTED_PNG1, 'r') as expected_png_file:
-        ident1 = png_str == expected_png_file.read()
-
-    with open(EXPECTED_PNG2, 'r') as expected_png_file:
-        ident2 = png_str == expected_png_file.read()
-
-    assert ident1 or ident2
-
+    match = image_matches(temp_png.name)
+    os.unlink(temp_png.name)
+    assert match is True

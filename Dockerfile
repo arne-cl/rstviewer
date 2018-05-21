@@ -2,7 +2,8 @@ FROM nlpbox/nlpbox-base:16.04
 
 RUN apt-get update -y && apt-get upgrade -y && \
     apt-get install -y python-pip firefox && \
-    pip2 install selenium==3.9.0 pytest==3.5.1 pudb
+    pip2 install selenium==3.9.0 && \
+                 pudb pytest==3.5.1 pillow==5.1.0 imagehash==4.0
 
 # settings for interactive debugging
 ADD pudb.cfg /root/
@@ -18,6 +19,6 @@ WORKDIR /opt
 RUN git clone https://github.com/arne-cl/rstviewer.git
 
 WORKDIR /opt/rstviewer
-RUN python2 setup.py install && pip2 install pytest==3.5.1
+RUN python2 setup.py install && pip2 install
 
 ENTRYPOINT ["rstviewer"]
