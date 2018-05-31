@@ -16,7 +16,7 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.19.1/geckod
 
 
 WORKDIR /opt
-RUN git clone https://github.com/arne-cl/rstviewer.git
+RUN git clone https://github.com/arne-cl/rstviewer
 
 WORKDIR /opt/rstviewer
 RUN python2 setup.py install && pip2 install
