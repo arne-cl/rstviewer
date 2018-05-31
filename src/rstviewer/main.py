@@ -10,6 +10,7 @@ https://github.com/amir-zeldes/rstWeb .
 """
 
 import argparse
+import base64
 import codecs
 import os
 import re
@@ -308,11 +309,12 @@ def rs3tohtml(rs3_filepath, user='temp_user', project='rstviewer_temp'):
     return cpout
 
 
-def rs3topng(rs3_filepath, png_filepath=None):
+def rs3topng(rs3_filepath, png_filepath=None, base64_encoded=False):
     """Convert a RS3 file into a PNG image of the RST tree.
 
-    If no output filename is given, the PNG image is returned
-    as a string (which is useful for embedding).
+    If no output filename is given, the PNG image is returned (as a binary
+    string). If base64 is True, the output file or the return value will
+    contain the PNG image in base64 encoded form.
     """
     try:
         from selenium import webdriver
@@ -343,6 +345,9 @@ def rs3topng(rs3_filepath, png_filepath=None):
     driver.set_window_size(height=doc_height, width=doc_width)
 
     png_str = driver.get_screenshot_as_png()
+    if base64_encoded is True:
+        png_str = base64.b64encode(png_str)
+
     if png_filepath:
         with open(png_filepath, 'w') as png_file:
             png_file.write(png_str)
@@ -371,10 +376,10 @@ def cli(argv=sys.argv[1:]):
     parser.add_argument('output_file', nargs='?')
     parser.add_argument(
         '-f', '--output-format', nargs='?', default='html',
-        help="output format: html (default), png")
+        help="output format: html (default), png, png-base64")
     parser.add_argument(
         '-d', '--debug', action='store_true',
-        help="output format: html (default), png")
+        help="run the program in pudb")
 
     args = parser.parse_args(argv)
 
@@ -388,6 +393,14 @@ def cli(argv=sys.argv[1:]):
         else:
             sys.stderr.write("No PNG output file given.\n")
             sys.exit(1)
+    elif args.output_format == 'png-base64':
+        if args.output_file:
+            rs3topng(args.rs3_file, args.output_file, base64_encoded=True)
+            sys.exit(0)
+        else:
+            base64_png_str = rs3topng(args.rs3_file, base64_encoded=True)
+            sys.stdout.write(base64_png_str)
+            sys.exit(0)
 
     if args.output_file:
         with codecs.open(args.output_file, 'w', 'utf8') as outfile:
