@@ -1,3 +1,11 @@
+Warning
+=======
+
+** This repository is DEPRECATED, please use my fork of rstWeb instead:
+
+https://github.com/arne-cl/rstWeb
+
+
 rstviewer
 =========
 
